@@ -8,21 +8,24 @@
 [![npm version](http://img.shields.io/npm/v/add-aligned-columns.svg)](https://www.npmjs.com/package/add-aligned-columns)
 [![npm downloads](https://img.shields.io/npm/dm/add-aligned-columns.svg)](https://www.npmjs.com/package/add-aligned-columns)
 ![license](https://img.shields.io/npm/l/add-aligned-columns)
-![build](https://img.shields.io/github/actions/workflow/status/bryanmylee/add-aligned-columns/publish.yml)
+![build](https://img.shields.io/github/actions/workflow/status/lolcabanon/add-aligned-columns/publish.yml)
 
 <!--[![coverage](https://coveralls.io/repos/github/lolcabanon/add-aligned-columns/badge.svg?branch=main)](https://coveralls.io/github/lolcbanon/add-aligned-columns?branch=main)-->
 
 </div>
 
-**Unopinionated and extensible data tables for Svelte**
+**See `svelte-headless-table` documentation for details.**
 
+> **Unopinionated and extensible data tables for Svelte**
+>
 > Build and design powerful datagrid experiences while retaining 100% control over styles and markup.
 >
 > Visit the [documentation](https://svelte-headless-table.bryanmylee.com/) for code examples and API reference, and get started with the [quick start guide](https://svelte-headless-table.bryanmylee.com/docs/getting-started/quick-start)!
 
+<!--
 ## Examples
 
-<!-- prettier-ignore -->
+<!-- prettier-ignore -- >
 ```svelte
 <script>
   const data = readable([
@@ -87,3 +90,4 @@
 ```
 
 For more complex examples with advanced features, visit the [documentation site](https://svelte-headless-table.bryanmylee.com/docs/plugins/overview).
+-->
