@@ -1,57 +1,24 @@
 <p align="center">
   <img src="https://user-images.githubusercontent.com/42545742/169733428-295e2678-e509-4175-aeb3-cb3a9c9894e1.svg" alt="svelte-headless-table" width="400px"/>
 </p>
-<h1 align="center">Svelte Headless Table</h1>
+<h1 align="center">`addAlignedColumns` plugin for [Svelte Headless Table](https://github.com/bryanmylee/svelte-headless-table)</h1>
 
 <div align="center">
 
-[![npm version](http://img.shields.io/npm/v/svelte-headless-table.svg)](https://www.npmjs.com/package/svelte-headless-table)
-[![npm downloads](https://img.shields.io/npm/dm/svelte-headless-table.svg)](https://www.npmjs.com/package/svelte-headless-table)
-![license](https://img.shields.io/npm/l/svelte-headless-table)
-![build](https://img.shields.io/github/actions/workflow/status/bryanmylee/svelte-headless-table/publish.yml)
+[![npm version](http://img.shields.io/npm/v/add-aligned-columns.svg)](https://www.npmjs.com/package/add-aligned-columns)
+[![npm downloads](https://img.shields.io/npm/dm/add-aligned-columns.svg)](https://www.npmjs.com/package/add-aligned-columns)
+![license](https://img.shields.io/npm/l/add-aligned-columns)
+![build](https://img.shields.io/github/actions/workflow/status/bryanmylee/add-aligned-columns/publish.yml)
 
-<!--[![coverage](https://coveralls.io/repos/github/bryanmylee/svelte-headless-table/badge.svg?branch=main)](https://coveralls.io/github/bryanmylee/svelte-headless-table?branch=main)-->
+<!--[![coverage](https://coveralls.io/repos/github/lolcabanon/add-aligned-columns/badge.svg?branch=main)](https://coveralls.io/github/lolcbanon/add-aligned-columns?branch=main)-->
 
 </div>
 
 **Unopinionated and extensible data tables for Svelte**
 
 > Build and design powerful datagrid experiences while retaining 100% control over styles and markup.
-
-Visit the [documentation](https://svelte-headless-table.bryanmylee.com/) for code examples and API reference, and get started with the [quick start guide](https://svelte-headless-table.bryanmylee.com/docs/getting-started/quick-start)!
-
-## Why Svelte Headless Table?
-
-Svelte Headless Table is designed to work **seamlessly** with Svelte. If you love Svelte, you will love Svelte Headless Table.
-
-- **Full TypeScript support**
-- Compatible with **SvelteKit** and SSR
-- Manage state with Svelte stores
-- Headless and fully customizable
-- Intuitive column-first declarative model
-- Highly performant
-- Feature-rich
-
-## All the features you could ever need!
-
-Svelte Headless Table comes with an extensive suite of plugins.
-
-Easily extend Svelte Headless Table with complex **sorting**, **filtering**, **grouping**, **pagination**, and much more.
-
-### Plugin roadmap
-
-- [x] [addSortBy](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-sort-by)
-- [x] [addColumnFilters](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-column-filters)
-- [x] [addTableFilter](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-table-filter)
-- [x] [addColumnOrder](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-column-order)
-- [x] [addHiddenColumns](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-hidden-columns)
-- [x] [addPagination](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-pagination)
-- [x] [addSubRows](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-sub-rows)
-- [x] [addGroupBy](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-group-by)
-- [x] [addExpandedRows](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-expanded-rows)
-- [x] [addSelectedRows](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-selected-rows)
-- [x] [addResizedColumns](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-resized-columns)
-- [x] [addGridLayout](https://svelte-headless-table.bryanmylee.com/docs/plugins/add-grid-layout)
+>
+> Visit the [documentation](https://svelte-headless-table.bryanmylee.com/) for code examples and API reference, and get started with the [quick start guide](https://svelte-headless-table.bryanmylee.com/docs/getting-started/quick-start)!
 
 ## Examples
 
