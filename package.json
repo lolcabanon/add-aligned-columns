@@ -1,7 +1,7 @@
 {
 	"name": "add-aligned-columns",
 	"description": "Plugin for svelte-headless-table",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
