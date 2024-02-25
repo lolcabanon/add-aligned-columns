@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/42545742/169733428-295e2678-e509-4175-aeb3-cb3a9c9894e1.svg" alt="svelte-headless-table" width="400px"/>
+  <img src="https://user-images.githubusercontent.com/42545742/169733428-295e2678-e509-4175-aeb3-cb3a9c9894e1.svg" alt="svelte-headless-table" width="200px"/>
 </p>
 <h1 align="center"><code>addAlignedColumns</code> plugin for <a href="https://github.com/bryanmylee/svelte-headless-table">Svelte Headless Table</a></h1>
 
