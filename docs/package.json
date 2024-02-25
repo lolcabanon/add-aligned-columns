@@ -1,5 +1,5 @@
 {
-  "name": "svelte-headless-table.bryanmylee.com",
+  "name": "add-aligned-columns.lolcabanon.dev",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -16,7 +16,7 @@
     "@iconify-json/ic": "^1.1.13",
     "@iconify-json/ri": "^1.1.1",
     "@rgossiaux/svelte-headlessui": "^2.0.0",
-    "@sveltejs/adapter-auto": "^2.1.0",
+    "@sveltejs/adapter-static": "^3.0.1",
     "@sveltejs/kit": "^1.21.0",
     "@svelteness/kit-docs": "^1.1.3",
     "@tailwindcss/typography": "^0.5.9",
