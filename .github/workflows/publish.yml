@@ -10,6 +10,7 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    environment: NPM_PUBLISH
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,7 +26,7 @@ jobs:
         with:
           node-version: 18
           cache: pnpm
-          # registry-url: https://registry.npmjs.org/
+          registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
