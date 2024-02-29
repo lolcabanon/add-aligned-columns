@@ -1,4 +1,3 @@
-import type { HeaderCell } from 'svelte-headless-table';
 import type {
   NewTableAttributeSet,
   NewTablePropSet,
@@ -9,6 +8,9 @@ import { derived, get, writable, type Writable } from 'svelte/store';
 export interface AddAlignedColumnsConfig {
   defaultAlignment?: ColumnAlignment;
   toggleOrder?: ColumnAlignment[];
+  alignmentType?: AlignmentType;
+  defaultToggle?: boolean;
+  defaultDisable?: boolean;
 }
 
 export interface AlignmentKey {
@@ -23,9 +25,13 @@ const DEFAULT_TOGGLE_ORDER: ColumnAlignment[] = [
   'right'
 ];
 
-export type ColumnAlignment = 'auto' | 'left' | 'right' | 'center';
+export type ColumnAlignment = 'auto' | 'left' | 'center' | 'right';
 
-export type AlignmentSpan = 'head' | 'body' | 'both';
+export type AlignFlex = 'normal' | 'flex-start' | 'center' | 'flex-end';
+
+export type AlignmentSpan = 'thead' | 'tbody';
+
+export type AlignmentType = 'prop' | 'text' | 'flex';
 
 export type AlignedColumnsState = {
   alignments: Writable<Record<string, ColumnAlignment | undefined>>;
@@ -33,9 +39,9 @@ export type AlignedColumnsState = {
 };
 
 export type AlignedColumnsColumnOptions = {
-  alignment?: ColumnAlignment;
-  alignHead?: boolean;
-
+  initialAlignment?: ColumnAlignment;
+  alignOn?: AlignmentSpan | AlignmentSpan[];
+  noToggle?: boolean;
   disable?: boolean;
 };
 
@@ -44,36 +50,47 @@ export type AlignedColumnsPropSet = NewTablePropSet<{
     alignment?: ColumnAlignment;
     toggle: (node: Element) => void;
     clear: (node: Element) => void;
+    noToggle?: boolean;
     disabled: boolean;
   };
   'tbody.tr.td': {
     alignment?: ColumnAlignment;
+    disabled: boolean;
   };
 }>;
 
 export type AlignedColumnsAttributeSet = NewTableAttributeSet<{
   'thead.tr.th': {
     style?: {
-      'text-align': ColumnAlignment;
+      'text-align'?: ColumnAlignment;
+      'justify-content'?: AlignFlex;
     };
   };
   'tbody.tr.td': {
-    style?: { 'text-align': ColumnAlignment };
+    style?: {
+      'text-align'?: ColumnAlignment;
+      'justify-content'?: AlignFlex;
+    };
   };
 }>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isCellDisabled = (cell: HeaderCell<any>, disabledIds: string[]) => {
-  return disabledIds.includes(cell.id);
+const flexAlignMap: Record<ColumnAlignment, AlignFlex> = {
+  auto: 'normal',
+  left: 'flex-start',
+  center: 'center',
+  right: 'flex-end'
 };
 
 type ColumnsAlignmentState = Record<string, ColumnAlignment | undefined>;
 
 export const addAlignedColumns =
   <Item>({
-    defaultAlignment,
-    toggleOrder = DEFAULT_TOGGLE_ORDER
-  }: AddAlignedColumnsConfig = {}): TablePlugin<
+    defaultAlignment = 'auto',
+    toggleOrder = DEFAULT_TOGGLE_ORDER,
+    alignmentType = 'prop',
+    defaultToggle = true,
+    defaultDisable = false
+  }: AddAlignedColumnsConfig): TablePlugin<
     Item,
     AlignedColumnsState,
     AlignedColumnsColumnOptions,
@@ -81,15 +98,19 @@ export const addAlignedColumns =
     AlignedColumnsAttributeSet
   > =>
   ({ columnOptions }) => {
-    const disabledAlignIds = Object.entries(columnOptions)
-      .filter(([, option]) => option.disable === true)
-      .map(([columnId]) => columnId);
+    const shouldDisable = (colDisable: boolean | undefined): boolean =>
+      colDisable !== undefined ? colDisable : defaultDisable;
+
+    const shouldToggle = (colNoToggle: boolean | undefined): boolean =>
+      colNoToggle !== undefined ? !colNoToggle : defaultToggle;
 
     const initialAlignments = Object.fromEntries(
       Object.entries(columnOptions).map(
-        ([columnId, { alignment, disable }]) => [
+        ([columnId, { initialAlignment, disable }]) => [
           columnId,
-          !disable ? alignment ?? defaultAlignment : undefined
+          shouldDisable(disable)
+            ? undefined
+            : initialAlignment ?? defaultAlignment
         ]
       )
     );
@@ -112,6 +133,8 @@ export const addAlignedColumns =
       columnOptions, // ? needed or useful ?
       hooks: {
         'thead.tr.th': (cell) => {
+          const { noToggle, alignOn, disable } = columnOptions[cell.id] ?? {};
+
           const onToggle = (e: Event) => {
             e.stopPropagation();
 
@@ -126,7 +149,7 @@ export const addAlignedColumns =
                 return toggleOrder[currentIndex + 1];
 
               const initialAlignment =
-                columnOptions[cell.id]?.alignment ?? get(alignDefault);
+                columnOptions[cell.id]?.initialAlignment ?? get(alignDefault);
               return initialAlignment && toggleOrder.includes(initialAlignment)
                 ? toggleOrder[0]
                 : initialAlignment;
@@ -152,11 +175,12 @@ export const addAlignedColumns =
             });
           };
 
-          //   const alignment = get(columnsAlignments)[cell.id];
           const props = derived(
             [columnsAlignments, alignDefault],
             ([$columnsAlignments, $alignDefault]) => {
               const toggle = (node: Element) => {
+                if (!shouldToggle(noToggle)) return;
+
                 node.addEventListener('click', onToggle);
                 return {
                   destroy() {
@@ -165,6 +189,8 @@ export const addAlignedColumns =
                 };
               };
               const clear = (node: Element) => {
+                if (!shouldToggle(noToggle)) return;
+
                 node.addEventListener('click', onClear);
                 return {
                   destroy() {
@@ -172,15 +198,17 @@ export const addAlignedColumns =
                   }
                 };
               };
-              const disabled = isCellDisabled(cell, disabledAlignIds);
+
+              const alignment = shouldDisable(disable)
+                ? undefined
+                : $columnsAlignments[cell.id] ?? $alignDefault;
 
               return {
-                alignment: columnOptions[cell.id]?.disable
-                  ? undefined
-                  : $columnsAlignments[cell.id] ?? $alignDefault,
+                alignment,
                 toggle,
                 clear,
-                disabled
+                noToggle: !shouldToggle(noToggle) || shouldDisable(disable),
+                disabled: shouldDisable(disable)
               };
             }
           );
@@ -188,14 +216,22 @@ export const addAlignedColumns =
           const attrs = derived(
             [columnsAlignments, alignDefault],
             ([$columnsAlignments, $alignDefault]) => {
-              const alignment = columnOptions[cell.id]?.disable
+              const alignment = shouldDisable(disable)
                 ? undefined
                 : $columnsAlignments[cell.id] ?? $alignDefault;
 
-              return columnOptions[cell.id]?.alignHead && alignment
+              return (!alignOn ||
+                alignOn === 'thead' ||
+                alignOn?.includes('thead')) &&
+                alignment
                 ? {
                     style: {
-                      'text-align': alignment
+                      'text-align':
+                        alignmentType === 'text' ? alignment : undefined,
+                      'justify-content':
+                        alignmentType === 'flex'
+                          ? flexAlignMap[alignment]
+                          : undefined
                     }
                   }
                 : {};
@@ -204,23 +240,51 @@ export const addAlignedColumns =
           return { props, attrs };
         },
         'tbody.tr.td': (cell) => {
-          const attrs = derived(
+          const { alignOn, disable } = columnOptions[cell.id] ?? {};
+
+          const props = derived(
             [columnsAlignments, alignDefault],
             ([$columnsAlignments, $alignDefault]) => {
-              const alignment = columnOptions[cell.id]?.disable
+              const alignment = shouldDisable(disable)
                 ? undefined
                 : $columnsAlignments[cell.id] ?? $alignDefault;
 
-              return alignment
+              return {
+                alignment,
+                disabled: shouldDisable(disable)
+              };
+            }
+          );
+
+          const attrs = derived(
+            [columnsAlignments, alignDefault],
+            ([$columnsAlignments, $alignDefault]) => {
+              const alignment = shouldDisable(disable)
+                ? undefined
+                : $columnsAlignments[cell.id] ?? $alignDefault;
+
+              console.log('alignment', alignment);
+
+              console.log('derived td attrs');
+
+              return (!alignOn ||
+                alignOn === 'tbody' ||
+                alignOn?.includes('tbody')) &&
+                alignment
                 ? {
                     style: {
-                      'text-align': alignment
+                      'text-align':
+                        alignmentType === 'text' ? alignment : undefined,
+                      'justify-content':
+                        alignmentType === 'flex'
+                          ? flexAlignMap[alignment]
+                          : undefined
                     }
                   }
                 : {};
             }
           );
-          return { attrs };
+          return { props, attrs };
         }
       }
     };

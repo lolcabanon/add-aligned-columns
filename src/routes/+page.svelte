@@ -42,7 +42,9 @@
 	const table = createTable(data, {
 		align: addAlignedColumns({
 			defaultAlignment,
-			toggleOrder: ['auto', 'right'],
+			// toggleOrder: ['auto', 'right'],
+			alignmentType: 'text',
+			defaultDisable: true,
 		}),
 		subRows: addSubRows({
 			children: 'children',
@@ -205,7 +207,7 @@
 					accessor: 'age',
 					plugins: {
 						align: {
-							alignment: 'right',
+							initialAlignment: 'right',
 							// disable: true,
 						},
 						group: {
@@ -224,6 +226,9 @@
 					id: 'status',
 					accessor: (item) => item.status,
 					plugins: {
+						align: {
+							disable: true,
+						},
 						sort: {
 							disable: true,
 						},
@@ -245,8 +250,9 @@
 					accessor: 'visits',
 					plugins: {
 						align: {
-							alignment: 'center',
-							alignHead: true,
+							initialAlignment: 'right',
+							alignOn: 'tbody',
+							noToggle: true,
 						},
 						group: {
 							getAggregateValue: (values) => sum(values),
@@ -354,7 +360,7 @@
 									{/if}
 								</div>
 
-								{#if !props.align.disabled && props.align.alignment !== undefined}
+								{#if !props.align.noToggle && !props.align.disabled}
 									<button use:props.align.toggle>
 										{props.align.alignment}
 									</button>
