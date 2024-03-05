@@ -14,6 +14,16 @@
 
 </div>
 
+**EXPERIMENTAL package**. Expect breaking changes and API refactor for the moment.
+
+## Installation
+
+`npm i add-aligned-columns`
+
+## How it works
+
+Like all other `svelte-headless-table` plugins!
+
 **See `svelte-headless-table` documentation for details.**
 
 > **Unopinionated and extensible data tables for Svelte**
